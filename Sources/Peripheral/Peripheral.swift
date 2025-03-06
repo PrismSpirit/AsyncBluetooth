@@ -150,13 +150,15 @@ public final class Peripheral: Sendable {
     }
     
     /// Writes the value of a characteristic.
-    public func writeValue(_ data: Data, for characteristic: Characteristic, type: CBCharacteristicWriteType) async throws {
+    public func writeValue(_ data: Data, for characteristic: Characteristic, type: CharacteristicWriteType) async throws {
         try await self.context.writeCharacteristicValueExecutor.enqueue(withKey: characteristic.uuid) { [weak self] in
             guard let self = self else { return }
             
-            self.cbPeripheral.writeValue(data, for: characteristic.cbCharacteristic, type: type)
+            let cbCharacteristicType: CBCharacteristicWriteType = (type == .withoutResponse) ? .withoutResponse : .withResponse
             
-            guard type == .withoutResponse else {
+            self.cbPeripheral.writeValue(data, for: characteristic.cbCharacteristic, type: cbCharacteristicType)
+            
+            guard type != .withResponse else {
                 return
             }
             

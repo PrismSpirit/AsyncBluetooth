@@ -44,7 +44,7 @@ extension Peripheral {
         _ value: Value,
         forCharacteristicWithUUID characteristicUUID: UUID,
         ofServiceWithUUID serviceUUID: UUID,
-        type: CBCharacteristicWriteType = .withResponse
+        type: CharacteristicWriteType = .withResponse
     ) async throws where Value: PeripheralDataConvertible {
         try await self.writeValue(
             value,
@@ -61,7 +61,7 @@ extension Peripheral {
         _ value: Value,
         forCharacteristicWithCBUUID characteristicCBUUID: CBUUID,
         ofServiceWithCBUUID serviceCBUUID: CBUUID,
-        type: CBCharacteristicWriteType = .withResponse
+        type: CharacteristicWriteType = .withResponse
     ) async throws where Value: PeripheralDataConvertible {
         guard let characteristic = try await self.findCharacteristic(
             cbuuid: characteristicCBUUID,
